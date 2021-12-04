@@ -17,14 +17,16 @@ final _titleController=TextEditingController();
 final _amountController=TextEditingController();
 var _selectedDate;
   void _submit(){
-    
+      if(_amountController.text.isEmpty){
+        return ;
+      }
       final ti=_titleController.text;
       final am=double.parse(_amountController.text);
 
-      if(ti.isEmpty || am<=0){
+      if(ti.isEmpty || am<=0 || _selectedDate==null){
         return;
       }
-      widget.addtx(ti,am);
+      widget.addtx(ti,am,_selectedDate,);
       Navigator.of(context).pop();
   }
 

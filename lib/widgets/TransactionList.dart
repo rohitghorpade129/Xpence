@@ -1,5 +1,6 @@
 import 'package:flutter/Material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import '../models/transaction.dart';
 import 'package:intl/intl.dart';
 import '../models/transaction.dart';
@@ -8,9 +9,9 @@ import '../models/transaction.dart';
 class TransactionList extends StatelessWidget {
 
   final List<Transaction> transactions;
-
+  final Function deletetx;
   
-  TransactionList(this.transactions);
+  TransactionList(this.transactions,this.deletetx);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -57,13 +58,9 @@ class TransactionList extends StatelessWidget {
             ),
             subtitle: Text(DateFormat.yMMMd().format(transactions[index].date)
             ),
-            trailing:GestureDetector(
-              child: CircleAvatar(
-                radius: 20,
-                child: Text("del"),
-                
-              ),
-              // onTap: transactions.remove(transactions[index]),
+            trailing: IconButton(icon: Icon(Icons.delete),
+            color: Theme.of(context).errorColor,
+            onPressed:()=>deletetx(transactions[index].id),
             ),
           ),
         );

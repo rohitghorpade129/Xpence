@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 import './widgets/TransactionList.dart';
 import 'package:Xpence/widgets/new_transaction.dart';
 import 'package:flutter/gestures.dart';
@@ -16,6 +18,7 @@ class MyApp extends StatelessWidget{
       theme: ThemeData(
         primarySwatch: Colors.red,
         accentColor: Colors.orange[600],
+        errorColor: Colors.red,
         fontFamily: 'Quicksand',
         textTheme: ThemeData.light().textTheme.copyWith(
           subtitle1: TextStyle(
@@ -73,14 +76,16 @@ class _MyHomePageState extends State<MyHomePage> {
     }).toList();
   }
 
-  void _addNewTransaction(String txTitle, double txamount){
+  void _addNewTransaction(String txTitle, double txamount, DateTime chosenDate){
       final newtx=Transaction(
       title: txTitle,
       amount: txamount,
-      date: DateTime.now(), 
+      date:chosenDate,
+      id: DateTime.now().toString(),
      );
  
- 
+
+
   setState(() {
     _userTransactions.add(newtx);
   });
@@ -94,6 +99,14 @@ class _MyHomePageState extends State<MyHomePage> {
         );
     });
   }
+   
+   void deleteTransaction(String id){
+      setState(() {
+        _userTransactions.removeWhere((tx)=> tx.id==id);
+        
+      });
+   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +128,7 @@ class _MyHomePageState extends State<MyHomePage> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Chart(recentTransactions),
-          TransactionList(_userTransactions),
+          TransactionList(_userTransactions,deleteTransaction),
         ],
         
         ),
