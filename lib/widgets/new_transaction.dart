@@ -17,7 +17,7 @@ final amountController=TextEditingController();
   void submit(){
     
       final ti=titleController.text;
-      final am=int.parse(amountController.text);
+      final am=double.parse(amountController.text);
 
       if(ti.isEmpty || am<=0){
         return;

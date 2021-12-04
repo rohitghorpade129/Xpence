@@ -1,3 +1,5 @@
+
+
 import 'package:flutter/Material.dart';
 import '../models/transaction.dart';
 import 'package:intl/intl.dart';
@@ -14,7 +16,26 @@ class TransactionList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height:300,
-      child: ListView.builder(
+      child:transactions.isEmpty ?
+      Column(
+        
+        children: <Widget>[
+          Text(
+            'No transactions Added',
+            style:Theme.of(context).textTheme.subtitle1,
+          ),
+          SizedBox(
+            height: 30,
+          ),
+          Container(
+            height: 200,
+            child: Image.asset(
+              'assets/images/waiting.png',
+            ),
+          ),
+        ],
+        ):
+      ListView.builder(
       itemBuilder:(ctx,index){
         return Card(
           child:Row(
@@ -41,11 +62,7 @@ class TransactionList extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children:<Widget> [
                     Text(transactions[index].title,
-                    style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                    color: Colors.black87,
-                    ),
+                    style: Theme.of(context).textTheme.subtitle1,
                     ),
                     Text(
                     DateFormat('dd MMM, yyyy').format(transactions[index].date),
