@@ -1,12 +1,20 @@
-import 'package:intl/intl.dart';
 
+
+import 'package:intl/intl.dart';
+import 'package:flutter/services.dart';
 import './widgets/TransactionList.dart';
 import 'package:Xpence/widgets/new_transaction.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'models/transaction.dart';
 import './widgets/chart.dart';
+
 void main() {
+  // WidgetsFlutterBinding.ensureInitialized();
+  // SystemChrome.setPreferredOrientations([
+  //   DeviceOrientation.portraitUp,
+  //   DeviceOrientation.portraitDown,
+  // ]);
   runApp(MyApp());
 }
 
@@ -39,6 +47,7 @@ class MyApp extends StatelessWidget{
           ),
       ),
       home:MyHomePage(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
@@ -49,27 +58,20 @@ class MyHomePage extends StatefulWidget {
  // String AmountInput;
   @override
   State<MyHomePage> createState() => _MyHomePageState();
+  
 }
+
+
 
 class _MyHomePageState extends State<MyHomePage> {
   final titleController=TextEditingController();
 
   final amountController=TextEditingController();
     final List<Transaction> _userTransactions=[
-      // Transaction( 
-      //      id:'t1',
-      //      title:'clothes', 
-      //      amount: 99,
-      //      date: DateTime.now()  
-      //      ), 
-      // Transaction  (
-      //       id:'t2' ,
-      //       title:'groceries' ,
-      //       amount: 567,
-      //       date: DateTime.now() 
-      //       )
+     
             ];
-  
+   bool _showChart=false;
+
   List<Transaction> get recentTransactions{
     return _userTransactions.where((tx) {
       return tx.date.isAfter(DateTime.now().subtract(Duration(days:7)));
@@ -110,8 +112,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
+      final bool IsLandscape =MediaQuery.of(context).orientation==Orientation.landscape;
+      final appBar= AppBar(
       //backgroundColor: Colors.pink[900],
       title: Text('Xpence'),
       actions: <Widget>[
@@ -120,15 +122,40 @@ class _MyHomePageState extends State<MyHomePage> {
           onPressed: () => _startAddNewTransaction(context),
           ),
       ],
-      ),
-      
+      );
+      final txListWidget= Container(
+            height: (MediaQuery.of(context).size.height - appBar.preferredSize.height - MediaQuery.of(context).padding.top)*0.7,
+            child: TransactionList(_userTransactions,deleteTransaction));
+      return Scaffold(
+        appBar: appBar,
       body: SingleChildScrollView(
+        
         child: Column(
         
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Chart(recentTransactions),
-          TransactionList(_userTransactions,deleteTransaction),
+          if(IsLandscape ) Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+            Text('show chart'),
+            Switch (value: _showChart, onChanged:(val){
+              setState(() {
+                _showChart=val;
+              });
+            }, ),
+          ],),
+          if(!IsLandscape) Container(
+            height: (MediaQuery.of(context).size.height - appBar.preferredSize.height - MediaQuery.of(context).padding.top)*0.3,
+            child: Chart(recentTransactions)
+            ),
+            if(!IsLandscape) txListWidget,
+            if(IsLandscape) _showChart? Container(
+            height: (MediaQuery.of(context).size.height - appBar.preferredSize.height - MediaQuery.of(context).padding.top)*0.85,
+            child: Chart(recentTransactions)
+            ):
+            txListWidget,
+
+          
         ],
         
         ),

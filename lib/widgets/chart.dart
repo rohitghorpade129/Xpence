@@ -1,3 +1,4 @@
+
 import 'package:Xpence/models/transaction.dart';
 import 'package:Xpence/widgets/chart_bar.dart';
 import 'package:flutter/material.dart';
@@ -40,23 +41,24 @@ class Chart extends StatelessWidget {
   Widget build(BuildContext context) {
     
     return Card(
-      elevation: 6,
-      margin: EdgeInsets.all(20),
-      child: Container(
-        padding: EdgeInsets.all(10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: groupedTransactionValues.map((data){
-            return Flexible(
-              fit: FlexFit.tight,
-              child: ChartBar(
-                data['day'],
-                data['amount'],
-                TotalSpending==0.0 ? 0.0 : (data['amount'] as double) / TotalSpending),
-            );
-          }).toList(),
+        elevation: 6,
+        margin: EdgeInsets.all(20),
+        child: Container(
+          padding: EdgeInsets.all(10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: groupedTransactionValues.map((data){
+              return Flexible(
+                fit: FlexFit.tight,
+                child: ChartBar(
+                  data['day'],
+                  data['amount'],
+                  TotalSpending==0.0 ? 0.0 : (data['amount'] as double) / TotalSpending),
+              );
+            }).toList(),
+          ),
         ),
-      ),
-     );
+       );
+    
   }
 }

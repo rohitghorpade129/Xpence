@@ -1,3 +1,5 @@
+
+
 import 'package:flutter/Material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,11 +16,9 @@ class TransactionList extends StatelessWidget {
   TransactionList(this.transactions,this.deletetx);
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height:300,
-      child:transactions.isEmpty ?
-      Column(
-        
+    return transactions.isEmpty ?
+      LayoutBuilder(builder:(ctx,constraints){
+        return Column(
         children: <Widget>[
           Text(
             'No transactions Added',
@@ -28,13 +28,14 @@ class TransactionList extends StatelessWidget {
             height: 30,
           ),
           Container(
-            height: 200,
+            height: constraints.maxHeight*0.6 ,
             child: Image.asset(
               'assets/images/waiting.png',
             ),
           ),
         ],
-        ):
+        );
+      }): 
       ListView.builder(
       itemBuilder:(ctx,index){
         
@@ -68,7 +69,7 @@ class TransactionList extends StatelessWidget {
       } ,
       itemCount: transactions.length,
       
-      ),
-);
+      );
+
 }
 }
